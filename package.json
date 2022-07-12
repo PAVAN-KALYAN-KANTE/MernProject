@@ -20,7 +20,8 @@
     "dependencies": {
         "assert": "^1.4.1",
         "express": "^4.18.1",
-        "mongodb": "^3.0.10",
+        "mongodb": "^3.7.3",
+        "mongoose": "^6.4.4",
         "nodemon": "^2.0.19"
     }
 }
