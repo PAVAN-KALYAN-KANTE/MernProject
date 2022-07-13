@@ -1,7 +1,8 @@
 const store = require("../sessionstore");
 var sessionChecker = (request, response, next) => {
   console.log("req.body.sessionId inside middleware", request.body.sessionId);
-  if (request.method == "POST") {
+  if (request.method === "POST") {
+    console.log("inside if");
     store.get(request.body.sessionId, (err, session) => {
       if (err) {
         console.log("err");
@@ -9,6 +10,7 @@ var sessionChecker = (request, response, next) => {
           isAuth: false,
         });
       } else if (!session) {
+        console.log("session if");
         response.json({
           isAuth: false,
         });
@@ -17,7 +19,7 @@ var sessionChecker = (request, response, next) => {
       }
     });
   } else {
-    store.get(request.param("sessionId"), (err, session) => {
+    store.get(request.body.sessionId, (err, session) => {
       if (err) {
         console.log("err");
         response.json({
@@ -30,7 +32,7 @@ var sessionChecker = (request, response, next) => {
       } else {
         console.log(
           "sessionId inside the sessionChecker is",
-          request.param("sessionId")
+          request.body.sessionId
         );
         next();
       }
