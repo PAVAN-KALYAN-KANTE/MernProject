@@ -4,7 +4,6 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const mongoose = require("./db/connection/connect");
 var loanroute = require("./Routes/loanroutes");
-var KnexSessionStore = require("connect-session-knex");
 
 const store = require("./utils/sessionstore");
 
