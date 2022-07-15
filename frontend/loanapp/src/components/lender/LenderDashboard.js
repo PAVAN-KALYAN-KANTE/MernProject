@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function AdminDashboard() {
+function LendorDashboard() {
   const myobj = { loanData: [], loans: [], items: [] };
   const { data, setData } = useState({ loanData: [], loans: [], items: [] });
   const [Items, setItems] = useState();
@@ -202,4 +202,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default LendorDashboard;

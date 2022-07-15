@@ -41,7 +41,7 @@ loanroute.post("/reqNewLoan", sessionChecker, (req, res) => {
   Actions.requestNewLoan(req.body, req, res);
 });
 
-loanroute.get("/getLoans", sessionChecker, (req, res) => {
+loanroute.get("/getLoans", (req, res) => {
   Actions.getLoans(req, res);
 });
 

@@ -7,6 +7,7 @@ function Login() {
   const [role, setRole] = useState("admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
   const handleRoleChange = (e) => {
@@ -15,18 +16,20 @@ function Login() {
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
+    console.log(email);
   };
 
   const handlePassword = (e) => {
     setPassword(e.target.value);
+    console.log(password);
   };
 
   const handleSubmit = (e) => {
-    if (email === null || password === null) {
+    if (email === "" || password === "") {
       alert("Please enter all details");
     } else {
       axios
-        .post("http://localhost:1234/login", {
+        .post("http://localhost:8000/login", {
           email: email,
           password: password,
           role: role,
@@ -35,13 +38,14 @@ function Login() {
           console.log(res);
           var response = res.data;
           if (res.data.isUserAdded === true) {
-            document.getElementById("hidden").setAttribute("id", "show");
+            setShow(true);
           } else if (
             response.content[0] &&
             response.content[0].role === "admin"
           ) {
-            localStorage.sessionId = response.sessionID;
-            localStorage.email = response.content[0].email;
+            localStorage.clear();
+            localStorage.setItem("sessionId", response.sessionID);
+            localStorage.setItem("email", response.content[0].email);
             navigate("/admin/dashboard");
           } else if (
             response.content[0] &&
@@ -49,8 +53,8 @@ function Login() {
           ) {
             console.log("response.sessionId", response.sessionID);
             console.log("inside cusstomer if login");
-            localStorage.sessionId = response.sessionID;
-            localStorage.email = response.content[0].email;
+            localStorage.setItem("sessionId", response.sessionID);
+            localStorage.setItem("email", response.content[0].email);
             navigate("/customer/dashboard");
           } else if (
             response.content[0] &&
@@ -58,8 +62,8 @@ function Login() {
           ) {
             console.log("response.sessionId", response.sessionID);
             console.log("inside lender if login");
-            localStorage.sessionId = response.sessionID;
-            localStorage.email = response.content[0].email;
+            localStorage.setItem("sessionId", response.sessionID);
+            localStorage.setItem("email", response.content[0].email);
             navigate("/lender/dashboard");
           }
         })
@@ -83,7 +87,7 @@ function Login() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Email"
-                onChange={handleEmail}
+                onChange={(e) => handleEmail(e)}
               />
             </div>
             <div className="mb-6">
@@ -94,25 +98,25 @@ function Login() {
                 className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 type="password"
                 placeholder="******************"
-                onChange={handlePassword}
+                onChange={(e) => handlePassword(e)}
               />
               <p className="text-red-500 text-xs italic">
                 Please choose a password.
               </p>
             </div>
-            <div class="inline-block relative w-64 my-6">
+            <div className="inline-block relative w-64 my-6">
               <select
-                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                 value={role}
-                onChange={handleRoleChange}
+                onChange={(e) => handleRoleChange(e)}
               >
                 <option value="admin">Admin</option>
                 <option value="lender">Lender</option>
                 <option value="customer">Customer</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
-                  class="fill-current h-4 w-4"
+                  className="fill-current h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -125,16 +129,19 @@ function Login() {
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 type="button"
-                onClick={handleSubmit}
+                onClick={(e) => handleSubmit(e)}
               >
                 Sign In
               </button>
             </div>
           </form>
         </div>
-        <div className="bg-red-600 text-red-200 mt-4" id="hidden">
-          We couldnt find you so you were registered...Login again to continue !
-        </div>
+        {show && (
+          <div className="bg-red-600 text-red-200 mt-4">
+            We couldnt find you so you were registered...Login again to continue
+            !
+          </div>
+        )}
       </div>
     </>
   );
