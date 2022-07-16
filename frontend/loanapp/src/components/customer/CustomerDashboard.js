@@ -78,7 +78,7 @@ function CustomerDashboard() {
   };
 
   return (
-    <div className="bg-black h-screen">
+    <div className="bg-black h-full">
       <h1 className="text-4xl text-center text-red-700">Customer Dashboard</h1>
 
       <div className="flex justify-end">

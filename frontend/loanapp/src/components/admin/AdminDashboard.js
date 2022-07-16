@@ -128,7 +128,7 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="bg-black h-screen">
+    <div className="bg-black h-full">
       <h1 className="text-red-700 text-center text-4xl">Admin Dashboard</h1>
       <div className=" flex justify-end">
         <button
