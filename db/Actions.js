@@ -4,7 +4,7 @@ var uuid = require("uuid");
 var Actions = {
   rejectLoan(loanObject, request, response) {
     console.log("got loanObject for rejectLoan", loanObject);
-    Users.update(
+    Users.updateOne(
       { "loans.loanid": loanObject.loanid },
       { $set: { "loans.$.status": "rejected" } },
       (err) => {

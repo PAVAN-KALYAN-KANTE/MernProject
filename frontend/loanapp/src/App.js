@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import CustomerDashboard from "./components/customer/CustomerDashboard";
+import Expired from "./components/Expired";
 import LendorDashboard from "./components/lender/LenderDashboard";
 import Login from "./components/Login";
 
@@ -11,7 +12,8 @@ function App() {
         <Route exact path="/" element={<Login />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-        <Route path="/lendor/dashboard" element={<LendorDashboard />} />
+        <Route path="/lender/dashboard" element={<LendorDashboard />} />
+        <Route path="/expired" element={<Expired />} />
       </Routes>
     </BrowserRouter>
   );

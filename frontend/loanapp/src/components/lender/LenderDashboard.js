@@ -2,11 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-function LendorDashboard() {
-  const myobj = { loanData: [], loans: [], items: [] };
+function LenderDashboard() {
+  var myobj = { loanData: [], loans: [], items: [] };
   const { data, setData } = useState({ loanData: [], loans: [], items: [] });
   const [Items, setItems] = useState();
+  const [isloaded, setLoad] = useState(false);
   const navigate = useNavigate();
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     axios
@@ -19,7 +21,7 @@ function LendorDashboard() {
         if (res.data.isAuth === false) {
           console.log("in useff");
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else {
           let response = res.data.content;
           myobj.loanData = response;
@@ -36,16 +38,20 @@ function LendorDashboard() {
               myobj.items.push(item);
             });
           });
-          console.log(myobj);
+          // console.log("myobj", myobj);
           setItems(myobj.items);
-          console.log("items", Items);
+          setLoad(true);
+          // console.log("items", myobj.items[0].loanid);
           //  setData({ ...data, items: myobj.items });
         }
       });
-  }, []);
+  }, [refresh]);
 
   const approveLoan = (e) => {
-    let myevent = e.taget.parentNode.parentNode;
+    let amount = e.target.getAttribute("amount");
+    console.log("amount", amount);
+    let myevent = e.target.parentNode.parentNode;
+    console.log(myevent);
     axios
       .post(
         "http://localhost:8000/approveLoan",
@@ -61,7 +67,7 @@ function LendorDashboard() {
       .then((res) => {
         if (res.data.isAuth === false) {
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else if (res.data.isApproved === true) {
           myobj.items.forEach((element) => {
             if (element.loanid === myevent.getAttribute("id")) {
@@ -69,18 +75,20 @@ function LendorDashboard() {
             }
           });
 
-          setData({
-            ...data,
-            loanData: myobj.loanData,
-            loans: myobj.loans,
-            items: myobj.items,
-          });
+          // setData({
+          //   ...data,
+          //   loanData: myobj.loanData,
+          //   loans: myobj.loans,
+          //   items: myobj.items,
+          // });
+          setItems(myobj.items);
+          setRefresh(!refresh);
         }
       });
   };
 
   const rejectLoan = (e) => {
-    let myevent = e.taget.parentNode.parentNode;
+    let myevent = e.target.parentNode.parentNode;
     axios
       .post(
         "http://localhost:8000/rejectLoan",
@@ -93,7 +101,7 @@ function LendorDashboard() {
       .then((res) => {
         if (res.data.isAuth === false) {
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else if (res.data.isRejected === true) {
           myobj.items.forEach((element) => {
             if (element.loanid === myevent.getAttribute("id")) {
@@ -101,12 +109,15 @@ function LendorDashboard() {
             }
           });
 
-          setData({
-            ...data,
-            loanData: myobj.loanData,
-            loans: myobj.loans,
-            items: myobj.items,
-          });
+          // setData({
+          //   ...data,
+          //   loanData: myobj.loanData,
+          //   loans: myobj.loans,
+          //   items: myobj.items,
+          // });
+
+          setItems(myobj.items);
+          setRefresh(!refresh);
         }
       });
   };
@@ -114,12 +125,11 @@ function LendorDashboard() {
   const logOut = () => {
     localStorage.clear();
     navigate("/");
-    console.log("myobj", data.items);
   };
 
   return (
-    <div>
-      <h1 className="text-danger">Admin Dashboard</h1>
+    <div className="bg-black h-screen">
+      <h1 className="text-red-500">Admin Dashboard</h1>
       <div className="mb-3 mt-3">
         <button className="p-2 bg-primary text-lg" onClick={logOut}>
           LOGOUT
@@ -151,10 +161,8 @@ function LendorDashboard() {
             </tr>
           </thead>
           <tbody>
-            {myobj.items &&
-              myobj.items.length > 0 &&
-              myobj.items.map((data) => {
-                console.log("table");
+            {isloaded &&
+              Items.map((data) => {
                 return (
                   <tr
                     key={data._id}
@@ -176,7 +184,6 @@ function LendorDashboard() {
                     <td className="py-4 px-6">{data.description}</td>
                     <td className="py-4 px-6">
                       <button
-                        className="btn btn-success"
                         onClick={(e) => approveLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
@@ -185,7 +192,6 @@ function LendorDashboard() {
                     </td>
                     <td className="py-4 px-6">
                       <button
-                        className="btn btn-danger"
                         onClick={(e) => rejectLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
@@ -202,4 +208,4 @@ function LendorDashboard() {
   );
 }
 
-export default LendorDashboard;
+export default LenderDashboard;

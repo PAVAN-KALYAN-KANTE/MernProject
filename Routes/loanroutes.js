@@ -26,10 +26,10 @@ loanroute.post("/test", (req, res) => {
   });
 });
 
-loanroute.get("/newLoan", sessionChecker, (req, res) => {
+loanroute.post("/newLoan", sessionChecker, (req, res) => {
   var loanObject = {
-    email: req.param("email"),
-    sessionId: req.param("sessionId"),
+    email: req.body.email,
+    sessionId: req.body.sessionId,
   };
   Actions.newLoan(loanObject, req, res);
 });

@@ -1,5 +1,6 @@
 const store = require("../sessionstore");
 var sessionChecker = (request, response, next) => {
+  console.log(request.body);
   console.log("req.body.sessionId inside middleware", request.body.sessionId);
   if (request.method === "POST") {
     console.log("inside if");

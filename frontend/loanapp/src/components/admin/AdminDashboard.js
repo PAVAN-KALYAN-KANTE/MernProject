@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function AdminDashboard() {
-  const myobj = { loanData: [], loans: [], items: [] };
+  var myobj = { loanData: [], loans: [], items: [] };
   const { data, setData } = useState({ loanData: [], loans: [], items: [] });
   const [Items, setItems] = useState();
+  const [isloaded, setLoad] = useState(false);
   const navigate = useNavigate();
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     axios
@@ -19,7 +21,7 @@ function AdminDashboard() {
         if (res.data.isAuth === false) {
           console.log("in useff");
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else {
           let response = res.data.content;
           myobj.loanData = response;
@@ -36,16 +38,20 @@ function AdminDashboard() {
               myobj.items.push(item);
             });
           });
-          console.log(myobj);
+          // console.log("myobj", myobj);
           setItems(myobj.items);
-          console.log("items", Items);
+          setLoad(true);
+          // console.log("items", myobj.items[0].loanid);
           //  setData({ ...data, items: myobj.items });
         }
       });
-  }, []);
+  }, [refresh]);
 
   const approveLoan = (e) => {
-    let myevent = e.taget.parentNode.parentNode;
+    let amount = e.target.getAttribute("amount");
+    console.log("amount", amount);
+    let myevent = e.target.parentNode.parentNode;
+    console.log(myevent);
     axios
       .post(
         "http://localhost:8000/approveLoan",
@@ -61,7 +67,7 @@ function AdminDashboard() {
       .then((res) => {
         if (res.data.isAuth === false) {
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else if (res.data.isApproved === true) {
           myobj.items.forEach((element) => {
             if (element.loanid === myevent.getAttribute("id")) {
@@ -69,18 +75,20 @@ function AdminDashboard() {
             }
           });
 
-          setData({
-            ...data,
-            loanData: myobj.loanData,
-            loans: myobj.loans,
-            items: myobj.items,
-          });
+          // setData({
+          //   ...data,
+          //   loanData: myobj.loanData,
+          //   loans: myobj.loans,
+          //   items: myobj.items,
+          // });
+          setItems(myobj.items);
+          setRefresh(!refresh);
         }
       });
   };
 
   const rejectLoan = (e) => {
-    let myevent = e.taget.parentNode.parentNode;
+    let myevent = e.target.parentNode.parentNode;
     axios
       .post(
         "http://localhost:8000/rejectLoan",
@@ -93,7 +101,7 @@ function AdminDashboard() {
       .then((res) => {
         if (res.data.isAuth === false) {
           localStorage.clear();
-          navigate("/");
+          navigate("/expired");
         } else if (res.data.isRejected === true) {
           myobj.items.forEach((element) => {
             if (element.loanid === myevent.getAttribute("id")) {
@@ -101,12 +109,15 @@ function AdminDashboard() {
             }
           });
 
-          setData({
-            ...data,
-            loanData: myobj.loanData,
-            loans: myobj.loans,
-            items: myobj.items,
-          });
+          // setData({
+          //   ...data,
+          //   loanData: myobj.loanData,
+          //   loans: myobj.loans,
+          //   items: myobj.items,
+          // });
+
+          setItems(myobj.items);
+          setRefresh(!refresh);
         }
       });
   };
@@ -114,14 +125,16 @@ function AdminDashboard() {
   const logOut = () => {
     localStorage.clear();
     navigate("/");
-    console.log("myobj", data.items);
   };
 
   return (
-    <div>
-      <h1 className="text-danger">Admin Dashboard</h1>
-      <div className="mb-3 mt-3">
-        <button className="p-2 bg-primary text-lg" onClick={logOut}>
+    <div className="bg-black h-screen">
+      <h1 className="text-red-700 text-center text-4xl">Admin Dashboard</h1>
+      <div className=" flex justify-end">
+        <button
+          className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+          onClick={() => logOut()}
+        >
           LOGOUT
         </button>
       </div>
@@ -151,10 +164,8 @@ function AdminDashboard() {
             </tr>
           </thead>
           <tbody>
-            {myobj.items &&
-              myobj.items.length > 0 &&
-              myobj.items.map((data) => {
-                console.log("table");
+            {isloaded &&
+              Items.map((data) => {
                 return (
                   <tr
                     key={data._id}
@@ -162,9 +173,9 @@ function AdminDashboard() {
                     id={data.loanid}
                     className={
                       data.status === "rejected"
-                        ? "bg-red-600"
+                        ? "bg-red-900"
                         : data.status === "approved"
-                        ? "bg-green-500"
+                        ? "bg-green-900"
                         : "border-b border-gray-200 dark:border-gray-700"
                     }
                   >
@@ -176,7 +187,6 @@ function AdminDashboard() {
                     <td className="py-4 px-6">{data.description}</td>
                     <td className="py-4 px-6">
                       <button
-                        className="btn btn-success"
                         onClick={(e) => approveLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
@@ -185,7 +195,6 @@ function AdminDashboard() {
                     </td>
                     <td className="py-4 px-6">
                       <button
-                        className="btn btn-danger"
                         onClick={(e) => rejectLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
