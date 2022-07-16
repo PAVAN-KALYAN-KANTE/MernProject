@@ -18,14 +18,6 @@ loanroute.post("/login", (req, res) => {
   Actions.loginUser(userObj, req, res);
 });
 
-loanroute.post("/test", (req, res) => {
-  console.log("req.header", req.headers);
-  res.json({
-    content: req.body,
-    sessionFromBackend: req.session,
-  });
-});
-
 loanroute.post("/newLoan", sessionChecker, (req, res) => {
   var loanObject = {
     email: req.body.email,
