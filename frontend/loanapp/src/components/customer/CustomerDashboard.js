@@ -186,20 +186,20 @@ function CustomerDashboard() {
               <tr>
                 <th
                   scope="col"
-                  className="py-3 px-6 bg-gray-50 dark:bg-gray-800"
+                  className="py-5 px-6 bg-gray-50 dark:bg-gray-800 border-2 border-blue-500"
                 >
                   Loan
                 </th>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-6 px-6 border-2 border-blue-500">
                   Amount
                 </th>
                 <th
                   scope="col"
-                  className="py-3 px-6 bg-gray-50 dark:bg-gray-800"
+                  className="py-5 px-6 bg-gray-50 dark:bg-gray-800 border-2 border-blue-500"
                 >
                   Description
                 </th>
-                <th scope="col" className="py-3 px-6">
+                <th scope="col" className="py-6 px-6 border-2 border-blue-500">
                   Status
                 </th>
               </tr>
@@ -219,10 +219,18 @@ function CustomerDashboard() {
                             : "border-b border-gray-200 dark:border-gray-700"
                         }
                       >
-                        <td className="py-4 px-6">{data.loanid}</td>
-                        <td className="py-4 px-6">{data.amount}</td>
-                        <td className="py-4 px-6">{data.description}</td>
-                        <td className="py-4 px-6">{data.status}</td>
+                        <td className="py-6 px-6 border-2 border-blue-500">
+                          {data.loanid}
+                        </td>
+                        <td className="py-6 px-6 border-2 border-blue-500">
+                          {data.amount}
+                        </td>
+                        <td className="py-6 px-6 border-2 border-blue-500">
+                          {data.description}
+                        </td>
+                        <td className="py-6 px-6 border-2 border-blue-500">
+                          {data.status}
+                        </td>
                       </tr>
                     );
                   })

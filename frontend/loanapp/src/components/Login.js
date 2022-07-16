@@ -74,11 +74,11 @@ function Login() {
   };
 
   return (
-    <>
-      <h1 className="text-center text-5xl m-3 font-serif">Please Login</h1>
-      <div className="flex items-center justify-center flex-col">
-        <div className="w-full max-w-xs m-12">
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="bg-cyan-300 h-screen">
+      <h1 className="text-center text-5xl p-3 font-serif">Please Login</h1>
+      <div className="flex items-center justify-center flex-col ">
+        <div className="w-full max-w-xs m-12 ">
+          <form className="bg-white shadow-2xl rounded-md px-8 pt-6 pb-8 mb-4 ">
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 Email
@@ -143,7 +143,7 @@ function Login() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

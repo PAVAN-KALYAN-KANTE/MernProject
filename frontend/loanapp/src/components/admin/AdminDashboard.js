@@ -143,22 +143,31 @@ function AdminDashboard() {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
-              <th scope="col" className="py-3 px-6 bg-gray-50 dark:bg-gray-800">
+              <th
+                scope="col"
+                className="py-5 px-6 bg-gray-800 border-2 border-blue-500"
+              >
                 loanId
               </th>
-              <th scope="col" className="py-3 px-6">
+              <th scope="col" className="py-5 px-6 border-2 border-blue-500">
                 Amount
               </th>
-              <th scope="col" className="py-3 px-6 bg-gray-50 dark:bg-gray-800">
+              <th
+                scope="col"
+                className="py-5 px-6 bg-gray-800 border-2 border-blue-500"
+              >
                 Status
               </th>
-              <th scope="col" className="py-3 px-6">
+              <th scope="col" className="py-5 px-6 border-2 border-blue-500">
                 Description
               </th>
-              <th scope="col" className="py-3 px-6 bg-gray-50 dark:bg-gray-800">
+              <th
+                scope="col"
+                className="py-5 px-6 bg-gray-800 border-2 border-blue-500 "
+              >
                 Operation
               </th>
-              <th scope="col" className="py-3 px-6">
+              <th scope="col" className="py-5 px-6 border-2 border-blue-500">
                 Operation
               </th>
             </tr>
@@ -179,22 +188,33 @@ function AdminDashboard() {
                         : "border-b border-gray-200 dark:border-gray-700"
                     }
                   >
-                    <td className="py-4 px-6">{data.loanid}</td>
-                    <td className="py-4 px-6" id={data.amount}>
+                    <td className="py-4 px-6 border-2 border-blue-500">
+                      {data.loanid}
+                    </td>
+                    <td
+                      className="py-4 px-6 border-2 border-blue-500"
+                      id={data.amount}
+                    >
                       {data.amount}
                     </td>
-                    <td className="py-4 px-6">{data.status}</td>
-                    <td className="py-4 px-6">{data.description}</td>
-                    <td className="py-4 px-6">
+                    <td className="py-4 px-6 border-2 border-blue-500">
+                      {data.status}
+                    </td>
+                    <td className="py-4 px-6 border-2 border-blue-500">
+                      {data.description}
+                    </td>
+                    <td className="py-4 px-6 border-2 border-blue-500">
                       <button
+                        className="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                         onClick={(e) => approveLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
                         approve
                       </button>
                     </td>
-                    <td className="py-4 px-6">
+                    <td className="py-4 px-6 border-2 border-blue-500">
                       <button
+                        className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                         onClick={(e) => rejectLoan(e)}
                         disabled={data.status === "pending" ? false : true}
                       >
